@@ -38,7 +38,7 @@ $('#searchList').on('click', event => {
 
 function getWeather(cityName) {
     
-    const apiUrl = `https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
 
     $.ajax({
         url: apiUrl,
@@ -46,7 +46,7 @@ function getWeather(cityName) {
     })
     .then ( response => {
         console.log(response);
-        const oneCallUrl = `https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/onecall?lat=${response.coord.lat}&lon=${response.coord.lon}&exclude=hourly,minutely&appid=${apiKey}`;
+        const oneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${response.coord.lat}&lon=${response.coord.lon}&exclude=hourly,minutely&appid=${apiKey}`;
 
         $.ajax({
             url: oneCallUrl,
@@ -63,7 +63,7 @@ function generateHTML (data, cityName) {
     const currentDate = convertDate(data.daily[0].dt);
     const currentTemp = convertTemp(data.current.temp);
     $('#currentWeather').html(`
-    <h2>${cityName} (${currentDate}) <span><img src='https://cors-anywhere.herokuapp.com/http://openweathermap.org/img/wn/${data.current.weather[0].icon}.png' alt ='Weather Icon'></span></h2>
+    <h2>${cityName} (${currentDate}) <span><img src='https://openweathermap.org/img/wn/${data.current.weather[0].icon}.png' alt ='Weather Icon'></span></h2>
     <p>Temperature: ${currentTemp} F</p>
     <p>Humidity: ${data.current.humidity} %</p>
     <p>Wind Speed: ${data.current.wind_speed} MPH</p>
@@ -75,7 +75,7 @@ function generateHTML (data, cityName) {
         const dailyTemp = convertTemp(data.daily[i].temp.day);
         $(`#title${[i]}`).html(`
         <h5>${dailyDate}</h5>
-        <img src='https://cors-anywhere.herokuapp.com/http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}.png' alt ='Weather Icon'>
+        <img src='https://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}.png' alt ='Weather Icon'>
         <p>Temp: ${dailyTemp} F</p>
         <p>Humidity: ${data.daily[i].humidity} %</p>
         `)
