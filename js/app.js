@@ -2,6 +2,7 @@ let cityName = '';
 let cityNameArray = ['Los Angeles'];
 const apiKey = '03c42fd0107a2e74601d8b1da29c9b04';
 
+
 getLocalStorage();
 
 window.onload = event => {
@@ -15,6 +16,7 @@ $('.btn-cityName').on('click', (event) => {
     getWeather(cityName);
     setLocalStorage(cityName);
     searchHistory(cityNameArray, cityNameArray.length);
+    $('#cityName').val('');
 })
 
 $('#searchList').on('click', event => {
@@ -28,6 +30,11 @@ $('#searchList').on('click', event => {
     }
 })
 
+/*
+*******************************************
+*******************************************
+        Function Declaration
+*/
 
 function getWeather(cityName) {
     
@@ -56,7 +63,7 @@ function generateHTML (data, cityName) {
     const currentDate = convertDate(data.daily[0].dt);
     const currentTemp = convertTemp(data.current.temp);
     $('#currentWeather').html(`
-    <h2>${cityName} (${currentDate})</h2>
+    <h2>${cityName} (${currentDate}) <span><img src='http://openweathermap.org/img/wn/${data.current.weather[0].icon}.png' alt ='Weather Icon'></span></h2>
     <p>Temperature: ${currentTemp} F</p>
     <p>Humidity: ${data.current.humidity} %</p>
     <p>Wind Speed: ${data.current.wind_speed} MPH</p>
@@ -68,6 +75,7 @@ function generateHTML (data, cityName) {
         const dailyTemp = convertTemp(data.daily[i].temp.day);
         $(`#title${[i]}`).html(`
         <h5>${dailyDate}</h5>
+        <img src='http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}.png' alt ='Weather Icon'>
         <p>Temp: ${dailyTemp} F</p>
         <p>Humidity: ${data.daily[i].humidity} %</p>
         `)
@@ -76,14 +84,11 @@ function generateHTML (data, cityName) {
 
 function convertDate (timestamp) {
   const myDate = new Date(timestamp * 1000);
-  
   const year = myDate.getFullYear();
   const month = (myDate.getMonth() +1 );
   const date = myDate.getDate();
- 
   const time = `${month}/${date}/${year}`;
   
-  console.log(time);
   return time;
 }
 
@@ -96,9 +101,9 @@ function setLocalStorage (cityName) {
     if (cityName == ''){
         return;
     }
+    
     cityNameArray.push(cityName);
     localStorage.setItem('cityNameArray', JSON.stringify(cityNameArray));
-    console.log(cityNameArray);
 }
 
 function getLocalStorage () {
@@ -113,13 +118,12 @@ function searchHistory (cityNameArray, arrayLength) {
 
     $('#searchList').empty();
 
-        for (let j = arrayLength -1; j >=0; j--){
-            const searchItem = $('<a>');
-            searchItem.addClass('list-group-item list-group-item-action search-item');
-            searchItem.attr('href','#');
-            searchItem.text(cityNameArray[j]);
-            
-            $('#searchList').append(searchItem);
-        }
+    for (let j = arrayLength -1; j >=0; j--){
+        const searchItem = $('<a>');
+        searchItem.addClass('list-group-item list-group-item-action search-item');
+        searchItem.attr('href','#');
+        searchItem.text(cityNameArray[j]);
+        $('#searchList').append(searchItem);
+    }
 }
 
